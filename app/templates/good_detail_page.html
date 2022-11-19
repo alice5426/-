@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品详情</title>
+    <link rel="stylesheet" href="{% static 'plugins/layui/css/layui.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1-dist/css/bootstrap.css' %}">
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .header {
+            background-color: #333;
+        }
+
+        .header .container {
+            width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header .menu {
+            float: left;
+        }
+
+        .header .account {
+            float: right;
+        }
+
+        .header a {
+            color: #b0b0b0;
+            line-height: 40px;
+            display: inline-block;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .header .a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+{# 头部导航条 #}
+<div class="header">
+    <div class="container clearfix">
+        <div class="menu">
+            <a href="/index/">首页</a>
+            <a href="https://www.taobao.com">淘宝</a>
+            <a href="https://www.jd.com">京东</a>
+        </div>
+        <div class="account">
+            {% if user_name == None %}
+                <a href="/login/">登录</a>
+                <a href="/register/">注册</a>
+            {% else %}
+                <a href="/user_center/">{{ user_name }}</a>
+                <a href="/index/issue_page">发布商品</a>
+                <a href="/login_out/">退出</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
