@@ -1,0 +1,19 @@
+.hobby  {
+    width: 1200px;
+    margin: auto;
+    border: 1px solid red;
+}
+.hobby-left {
+    background: white;
+    width:200px ;
+    height: 500px;
+    border: 1px solid blue;
+    float: left;
+    margin-top:20px ;
+    margin-left: 20px;
+}
+.hobby-right    {
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
+}

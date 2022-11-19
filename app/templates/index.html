@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>电子商务平台</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1-dist/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'plugins/layui/css/layui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .header {
+            background-color: #333;
+        }
+
+        .header .container {
+            width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header .menu {
+            float: left;
+        }
+
+        .header .account {
+            float: right;
+        }
+
+        .header a {
+            color: #b0b0b0;
+            line-height: 40px;
+            display: inline-block;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .header .a:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body style="background: #eee">
+{# 头部导航条 #}
+<div class="header">
+    <div class="container clearfix">
+        <div class="menu">
+            <a href="/index/">首页</a>
+            <a href="https://www.taobao.com">淘宝</a>
+            <a href="https://www.jd.com">京东</a>
+        </div>
+        <div class="account">
+            {% if user_name == None %}
+                <a href="/login/">登录</a>
+                <a href="/register/">注册</a>
+            {% else %}
+                <a href="/user_center/">{{ user_name }}</a>
+                <a href="/index/issue_page">发布商品</a>
+                <a href="/login_out/">退出</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{# 主页面内容 #}
+<div class="hobby clearfix">
+    {# 主页面左边的分类栏 #}
+    <div class="hobby-left">
+        <div>
+            <a>手机</a>
+        </div>
+    </div>
+    <div class="hobby-right">
+        {# 轮播 #}
+        <div class="layui-carousel" id="test1">
+            <div carousel-item>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+            </div>
+        </div>
+        {# 分类栏内容的展示 #}
+        <div>
+
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'plugins/layui/layui.js' %}"></script>
+<script type="text/javascript">
+    layui.use('carousel', function () {
+        let carousel = layui.carousel;
+        carousel.render({
+            elem: '#test1',
+            width: '940px',  // 设置容器宽度
+            height: '280px', //设置容器高度
+            arrow: 'always',  // 始终显示箭头
+            anim: 'default', //切换动画的方式为左右切换
+            autoplay: 'true', // 自动切换
+        });
+    });
+</script>
+
+</body>
+</html>
