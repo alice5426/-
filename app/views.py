@@ -216,3 +216,10 @@ def issue_form(request):
     return HttpResponse(flag)
 
 
+# 商品详情页面
+def good_detail_page(request):
+    user_name = request.session.get('user_name')
+    id = request.GET.get('id')
+    print("id:" + id)
+    goods_detail = Goods.objects.get(id=id)
+    return render(request, "good_detail_page.html", {"goods_detail": goods_detail, "user_name": user_name})
