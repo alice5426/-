@@ -196,6 +196,8 @@
                 console.log(data);
                 if (data === 1){
                     layer.msg("发布成功");
+                    $("input").val('');
+                    $("textarea").val('');
                 }
                 else if (data === 0){
                     layer.msg("数据储存失败");
