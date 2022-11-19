@@ -28,5 +28,7 @@ urlpatterns = [
     path('user_center/', views.user_center),
     path('index/issue_page/', views.issue_page),
     path('index/issue_page/issue_form/', views.issue_form),
+    path('goods_deatil_page/', views.good_detail_page),
+    re_path(r'goods_detail_page?id=(\d+)', views.good_detail_page),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
