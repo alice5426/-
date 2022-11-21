@@ -1,2 +1,2 @@
 # 电子商务交易平台
-surface 与 笔记本同步(11.21.a.m）
+surface 与 笔记本同步(11.21.a.m）。删除css文件中的banner.css
