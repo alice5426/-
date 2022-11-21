@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from app.models import Goods, User, Cart, Sort
 import hashlib
 from django.conf import settings
-
+import json
 
 # hash加密存储与验证
 def hash_md5(ciphertext):
@@ -223,3 +223,28 @@ def good_detail_page(request):
     print("id:" + id)
     goods_detail = Goods.objects.get(id=id)
     return render(request, "good_detail_page.html", {"goods_detail": goods_detail, "user_name": user_name})
+
+
+# 测试
+def test(request):
+    user_id = request.session.get("user_id")
+    cart = Cart()
+    cart.user_id = User.objects.get(id=user_id)
+    return HttpResponse(cart.user_id.id)
+
+
+# 加入购物车
+def join_cart(request):
+    result = 1
+    good_id = request.GET.get("id")
+    print(good_id)
+    user_id = request.session.get("user_id")
+    cart = Cart()
+    cart.user_id = User.objects.get(id=user_id).id
+    cart.goods_id = Goods.objects.get(id=good_id).id
+    try:
+        cart.save()
+    except Exception:
+        print(Exception)
+        result = 0
+    return HttpResponse(json.dumps(result))
