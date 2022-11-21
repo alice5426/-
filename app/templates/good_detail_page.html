@@ -6,6 +6,7 @@
     <title>商品详情</title>
     <link rel="stylesheet" href="{% static 'plugins/layui/css/layui.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1-dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/good_detail.css' %}">
     <style>
         body {
             margin: 0;
@@ -41,7 +42,7 @@
         }
     </style>
 </head>
-<body>
+<body style="background-color: #eee">
 {# 头部导航条 #}
 <div class="header">
     <div class="container clearfix">
@@ -63,48 +64,48 @@
     </div>
 </div>
 {# 商品展示内容 #}
-<div>
-    <div>
-        <div>
-            {# 发布时间 #}
-            <div>
-                <p>发布于：{{ goods_detail.create_time }}</p>
+<div class="soma clearfix">
+    <div class="juzhong">
+        {# 发布时间 #}
+        <div class="shang_pin_time">
+            <p>发布于：{{ infor.updatetime|date:"Y-m-d H:i:s" }}{{ goods_detail.create_time }}</p>
+        </div>
+        {# 图片展示 #}
+        <div class="img_size">
+            <img src="{{ MEDIA_URL }}{{ goods_detail.img }}"/>
+        </div>
+        {# 名称、价格等内容展示 #}
+        <div class="detail-place">
+            <hr style="width: 400px;margin-top: 0px"/>
+            <div class="bottom">
+                <h3>{{ goods_detail.name }}</h3>
             </div>
-            {# 图片展示 #}
-            <div>
-                <img src="{{ MEDIA_URL }}{{ goods_detail.img }}"/>
+            <div class="bottom">
+                <p class="goods-text">价格</p>
+                <p class="price-red goods-text-right">￥{{ goods_detail.price }}</p>
             </div>
-            {# 名称、价格等内容展示 #}
-            <div>
-                <div>
-                    <h2>{{ goods_detail.name }}</h2>
-                </div>
-                <div>
-                    <p>价格</p>
-                    <p>￥{{ goods_detail.price }}</p>
-                </div>
-                <div>
-                    <p>交易方式</p>
-                    <p>线上交易</p>
-                </div>
-                <div>
-                    <p>卖家联系方式</p>
-                    <p>电话号码:</p>
-                    <p>{{ goods_detail.master_pho }}</p>
-                </div>
-                <div>
-                    <button onclick="join_cart({{ goods_detail.id }})">加入购物车</button>
-                </div>
+            <div class="bottom">
+                <p class="goods-text">交易方式</p>
+                <p class="goods-text-right" style="margin-left:25px">线上交易</p>
             </div>
-            {# 商品描述内容显示 #}
+            <div class="bottom">
+                <p class="goods-text">卖家联系方式</p>
+                <p class="goods-text-right">电话号码:{{ goods_detail.master_pho }}</p>
+            </div>
+            <div class="button-goods">
+                <button onclick="join_cart({{ goods_detail.id }})" class="btn btn-success">加入购物车</button>
+            </div>
+            <hr style="width: 400px;margin-bottom: 0;"/>
+        </div>
+        {# 商品描述内容显示 #}
+        <div class="detail_bg">
+            <div class="miao_shu">
+                <p style="font-size: 20px; font-weight: bolder;">商品描述</p>
+            </div>
+            <hr class="layui-border-blue" style="margin-top: 5px;">
             <div>
-                <div>
-                    <p>商品描述</p>
-                </div>
-                <div>
-                    <div>
-                        <text>{{ goods_detail.detal }}</text>
-                    </div>
+                <div class="miao_shu">
+                    <text>{{ goods_detail.detal }}</text>
                 </div>
             </div>
         </div>
@@ -114,31 +115,34 @@
 <script src="{% static 'js/jquery-3.6.1.js' %}"></script>
 <script src="{% static 'plugins/layui/layui.js' %}"></script>
 <script type="text/javascript">
-    function join_cart(id){
+    function join_cart(id) {
         $.ajax({
             url: 'join_cart',
             type: 'GET',
-            data: {"id":id},
+            data: {"id": id},
             dataType: 'json',
-            success: function (data){
-                if (data ===1){
-                    layer.confirm('加入成功',{
+            success: function (data) {
+                if (data === 1) {
+                    layer.confirm('加入成功', {
                         btn: ['确定', '取消']
-                    }, function (){
-                        window.location.href = "user_center";
-                    }, function (){
+                    }, function () {
+                        window.location.href = "/user_center";
+                    }, function () {
 
                     });
                 }
-                if (data ===2){
+                if (data === 2) {
                     layer.msg("商品已经加入购物车");
                 }
             },
-            error: function (){
+            error: function () {
                 layer.msg("发生未知错误");
             }
         });
     }
+
+    let a = {{ MEDIA_URL }};
+    console.log(a);
 </script>
 </body>
 </html>
