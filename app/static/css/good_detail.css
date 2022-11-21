@@ -1,0 +1,71 @@
+.soma {
+    width: 1200px;
+    margin: auto;
+    background: white;
+}
+
+.soma .juzhong {
+    width: 1000px;
+    height: 700px;
+    padding-top: 40px;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.shang_pin_time {
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.img_size {
+    width: 450px;
+    height: 400px;
+    float: left;
+    margin-left: 10px;
+}
+
+.img_size img {
+    width: 100%;
+    height: 100%;
+}
+
+.detail-place {
+    width: 500px;
+    float: right;
+    margin-right: 40px;
+    /*border: 1px solid red;*/
+    padding-left: 30px;
+}
+
+.bottom {
+    margin-bottom: 20px;
+}
+
+.goods-text {
+    color: #8c8c8c;
+    display: inline-block;
+    margin-right: 50px;
+    margin-bottom: 50px;
+}
+
+.goods-text-right {
+    display: inline-block;
+}
+
+.price-red {
+    color: red;
+    font-size: 20px;
+    margin-left: 50px;
+}
+
+.button-goods {
+    padding-left: 140px;
+}
+
+.detail_bg {
+    margin-top: 450px;
+}
+
+.miao_shu {
+    margin-left: 20px;
+}
