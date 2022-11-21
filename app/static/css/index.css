@@ -1,19 +1,35 @@
-.hobby  {
+.hobby {
     width: 1200px;
     margin: auto;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
+
 .hobby-left {
-    background: white;
-    width:200px ;
-    height: 500px;
-    border: 1px solid blue;
+    width: 200px;
+    height: 450px;
+    /*border: 1px solid blue;*/
     float: left;
-    margin-top:20px ;
+    margin-top: 30px;
     margin-left: 20px;
 }
-.hobby-right    {
+
+.hobby-right {
     float: right;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-right: 20px;
+}
+
+.sort-bg {
+    background: white;
+    margin-bottom: 5px;
+    height: 50px;
+    text-align: center;
+}
+
+.sort {
+    line-height: 50px;
+    font-size: 20px;
+}
+a:hover{
+    text-decoration: none;
 }
