@@ -1,3 +1,4 @@
+import json
 import os.path
 import uuid
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
@@ -9,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from app.models import Goods, User, Cart, Sort
 import hashlib
 from django.conf import settings
-import json
+
 
 # hash加密存储与验证
 def hash_md5(ciphertext):
@@ -28,10 +29,15 @@ def do_file_name(file_name):
 def index(request):
     user_name = request.session.get('user_name')
     user_id = request.session.get('user_id')
+    if user_id is not None:
+        user = User.objects.get(id=user_id)
+        goods_list = Goods.objects.filter().exclude(user_id=user_id).order_by('create_time')
+    else:
+        goods_list = Goods.objects.filter().order_by('create_time')
+    print(goods_list)
     return render(request, 'index.html', locals())
 
 
-# 登录
 def login(request):
     if request.method == "GET":
         # username = request.session.get('username', None)
@@ -51,19 +57,19 @@ def login(request):
 
     if request.method == "POST":
         pub_key = request.session.get('pubkey')
-        username = request.POST.get('username')
+        user_name = request.POST.get('username')
         password = request.POST.get('passwd')
         # 对用户输入的用户名和密码进行检查
-        username_db = User.objects.all()
-        if username and password:
+        username_db = User.objects.values('username')
+        if user_name and password:
             privkeystr = request.session.get('privkey').encode()
             privkey = RSA.importKey(privkeystr)
             cipher = PKCS1_v1_5.new(privkey)
             # 将base64编码格式password进行解码，后解密
             password = cipher.decrypt(base64.b64decode(password.encode()), 'error').decode()
             for user in username_db:
-                if username in user.username:
-                    user_current = User.objects.get(username=username)
+                if user_name == user['username']:
+                    user_current = User.objects.get(username=user_name)
                     password_md5 = hash_md5(password)
                     if password_md5 == user_current.password:
                         request.session['user_name'] = user_current.username
@@ -71,19 +77,14 @@ def login(request):
                         return HttpResponseRedirect('/index/')
                     else:
                         error = "用户名或密码错误"
-                        return render(request, 'login.html', locals())
                 else:
                     error = "用户名或密码错误"
-                    return render(request, 'login.html', locals())
-            else:
-                error = "用户名或密码错误"
-                return render(request, 'login.html', locals())
-        else:
-            error = "用户名或密码不能为空"
             return render(request, 'login.html', locals())
+    else:
+        error = "用户名或密码不能为空"
+        return render(request, 'login.html', locals())
 
 
-# 注册
 def register(request):
     if request.method == "GET":
         random_generator = Random.new().read
@@ -147,7 +148,6 @@ def register(request):
                 return render(request, 'register.html', locals())
 
 
-# 退出
 def login_out(request):
     del request.session['user_name']
     del request.session['user_id']
@@ -222,6 +222,7 @@ def good_detail_page(request):
     id = request.GET.get('id')
     print("id:" + id)
     goods_detail = Goods.objects.get(id=id)
+    print(goods_detail.create_time)
     return render(request, "good_detail_page.html", {"goods_detail": goods_detail, "user_name": user_name})
 
 
@@ -237,7 +238,6 @@ def test(request):
 def join_cart(request):
     result = 1
     good_id = request.GET.get("id")
-    print(good_id)
     user_id = request.session.get("user_id")
     cart = Cart()
     cart.user_id = User.objects.get(id=user_id).id
