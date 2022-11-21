@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>电子商务平台</title>
-    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1-dist/css/bootstrap.css' %}"/>
-    <link rel="stylesheet" href="{% static 'plugins/layui/css/layui.css' %}">
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap-3.4.1-dist/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/layui/css/layui.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
     <style>
         body {
             margin: 0;
@@ -69,8 +69,29 @@
 <div class="hobby clearfix">
     {# 主页面左边的分类栏 #}
     <div class="hobby-left">
-        <div>
-            <a>手机</a>
+        <div class="sort-bg">
+            <a class="sort" href="/index/">手机</a>
+        </div>
+        <div class="sort-bg">
+            <a class="sort" href="/index/">电脑</a>
+        </div>
+        <div class="sort-bg">
+            <a class="sort" href="/index/">配件</a>
+        </div>
+        <div class="sort-bg">
+            <a class="sort" href="/index/">电器</a>
+        </div>
+        <div class="sort-bg">
+            <a class="sort" href="/index/">书籍</a>
+        </div>
+        <div class="sort-bg">
+            <a class="sort" href="/index/">娱乐</a>
+        </div>
+        <div class="sort-bg">
+            <a class="sort" href="/index/">运动</a>
+        </div>
+        <div class="sort-bg">
+            <a class="sort" href="/index/">零食</a>
         </div>
     </div>
     <div class="hobby-right">
