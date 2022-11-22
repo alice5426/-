@@ -6,6 +6,7 @@
     <title>用户中心</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1-dist/css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user_center.css' %}">
     <style>
         body {
             margin: 0;
@@ -39,48 +40,6 @@
 
         .header .a:hover {
             color: white;
-        }
-
-        .user_center {
-            width: 1200px;
-            height: 500px;
-            margin: 20px auto auto;
-        }
-
-        .user_center_middle {
-            width: 170px;
-            /*border: 1px solid red;*/
-            margin-left: 2%;
-            background-color: white;
-            float: left;
-        }
-
-        .user_center_middle .user_lift {
-            height: 50px;
-            margin-top: 5px;
-            text-align: center;
-        }
-
-        .user_center_middle .tag_float {
-            float: left;
-            margin-left: 20%;
-            font-size: 20px;
-        }
-
-        .img_show {
-            width: 130px;
-            height: 130px;
-            margin-top: 5px;
-            margin-left: 20px;
-        }
-
-        .user_center .user_center_right {
-            width:950px;
-            height: 500px;
-            border: 1px solid red;
-            float: right;
-            margin-left: 10px;
-            margin-right: 30px;
         }
     </style>
 </head>
@@ -139,7 +98,7 @@
     <div class="user_center_right">
         <div id="show_1">
             {#  我的发布 #}
-            {%  for foo in issue_list %}
+            {% for foo in issue_list %}
                 <div>
                     <div>
                         <a>{{ foo.create_time }}</a>
@@ -171,10 +130,104 @@
 
         <div id="show_2">
             {#  商品 #}
+            {% for foo in cart_list %}
+                <div>
+                    <div>
+                        <a>{{ foo.goods.create_time | date:"Y-m-d H:i:s" }}</a>
+                    </div>
+
+                    <div>
+                        <div>
+                            <img src="{{ MEDIA_URL }}{{ foo.goods.img }}"/>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            <h2>{{ foo.goods.name }}</h2>
+                        </div>
+                        <div>
+                            <h2>￥</h2>
+                            <div>{{ foo.goods.price }}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="del_button1" onclick="buy_good({{ foo.goods.id }})" style="cursor: pointer">立即购买</button>
+                        <button class="del_button2" onclick="del_cart({{ foo.goods.id }})" style="cursor:pointer">删除</button>
+                    </div>
+                </div>
+            {% endfor %}
+            <button class="del_button3" onclick="buy_allgood({{ foo.goods.id }})" style="cursor: pointer">全部购买</button>
+        </div>
+
+        <div id="show_3">
+            <div>
+                <div>
+                    <div>
+                        <a>头像</a>
+                    </div>
+
+                    <div>
+                        <img id="show_img_2" src="{% static 'img/login_background.png' %}"/>
+                    </div>
+
+                    <div>
+                        <input id="head_pic" type="file">
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <a>*昵称</a>
+                    </div>
+                    <div>
+                        <input type="text" name="goods_name" autocomplete="off" placeholder="用户信息">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="show_4">
+            <div>用任何问题请联系开发人员：15896586579</div>
         </div>
     </div>
 </div>
 
 
+<script src="{% static 'js/jquery-3.6.1.js' %}"></script>
+<script src="{% static 'plugins/layui/layui.js' %}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#show_1').hide();
+        $('#show_3').hide();
+        $('#show_4').hide();
+        $('#show_2').show();
+        $('#fun_1').click(function () {
+            $('#show_2').hide();
+            $('#show_3').hide();
+            $('#show_4').hide();
+            $('#show_1').show();
+        });
+        $('#fun_2').click(function () {
+            $('#show_1').hide();
+            $('#show_3').hide();
+            $('#show_4').hide();
+            $('#show_2').show();
+        });
+        $('#fun_3').click(function () {
+            $('#show_1').hide();
+            $('#show_2').hide();
+            $('#show_4').hide();
+            $('#show_3').show();
+        });
+        $('#fun_4').click(function () {
+            $('#show_1').hide();
+            $('#show_2').hide();
+            $('#show_3').hide();
+            $('#show_4').show();
+        });
+    });
+</script>
 </body>
 </html>
