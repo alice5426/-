@@ -1,0 +1,41 @@
+.user_center {
+    width: 1200px;
+    height: 500px;
+    margin: 20px auto auto;
+}
+
+.user_center_middle {
+    width: 170px;
+    /*border: 1px solid red;*/
+    margin-left: 2%;
+    background-color: white;
+    float: left;
+}
+
+.user_center_middle .user_lift {
+    height: 50px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.user_center_middle .tag_float {
+    float: left;
+    margin-left: 20%;
+    font-size: 20px;
+}
+
+.img_show {
+    width: 130px;
+    height: 130px;
+    margin-top: 5px;
+    margin-left: 20px;
+}
+
+.user_center .user_center_right {
+    width: 950px;
+    height: 500px;
+    border: 1px solid red;
+    float: right;
+    margin-left: 10px;
+    margin-right: 30px;
+}
