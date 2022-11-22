@@ -30,6 +30,53 @@
     line-height: 50px;
     font-size: 20px;
 }
-a:hover{
+
+.sort-bg a:hover {
     text-decoration: none;
+}
+
+.fen_ye_bg {
+    width: 950px;
+    margin-top: 5px;
+}
+
+.fen_ye_bg .l_1 {
+    width: 225px;
+    height: 240px;
+    margin-right: 5px;
+    background: white;
+    padding-top: 5px;
+    display: inline-block;
+    margin-top: 5px;
+}
+.l_1 a{
+    text-decoration: none;
+}
+
+.l_1 .l_1_70 {
+    width: 180px;
+    height: 180px;
+    margin: auto;
+}
+
+.fen_ye_bg .l_1_70 img {
+    width: 100%;
+    height: 100%;
+}
+
+.l_1 .l_1_15_txt {
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+}
+
+.l_1_15_txt .name_txt {
+    font-size: 15px;
+}
+.l_1 .l_1_price{
+    height: 35px;
+}
+.l_1_price .l_1_15{
+    color: red;
+    line-height: 15px;
 }
