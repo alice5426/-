@@ -159,6 +159,18 @@ def login_out(request):
 # 用户中心
 def user_center(request):
     user_name = request.session.get('user_name')
+    user_id = request.session.get('user_id')
+    # 该用户发布的商品
+    issue_list = Goods.objects.filter(user_id=user_id)
+    print(issue_list.count())
+    # 该用户购物车中商品
+    goods_list = Cart.objects.filter(user_id=user_id)
+    cart_list = []
+    for goods_id in goods_list.values('goods_id'):
+        good_id = goods_id['goods_id']
+        good = Goods.objects.get(id=good_id)
+        cart_list.append(good)
+    print(cart_list)
     return render(request, 'user_center.html', locals())
 
 
