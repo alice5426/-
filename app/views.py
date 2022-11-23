@@ -252,8 +252,8 @@ def join_cart(request):
     good_id = request.GET.get("id")
     user_id = request.session.get("user_id")
     cart = Cart()
-    cart.user_id = User.objects.get(id=user_id).id
-    cart.goods_id = Goods.objects.get(id=good_id).id
+    cart.user_id = user_id
+    cart.goods_id = good_id
     try:
         cart.save()
     except Exception:
