@@ -2,7 +2,7 @@
 1.surface 与 笔记本同步(11.21.a.m）。删除css文件中的banner.css <br>
 2.笔记本（11.22.a.m）。修改user_center.html和uer_center.css
 3.surface（11.22.p.m)对views.py进行部分修改，主要对用户界面进行修改（未提交到GitHub）<br>
-4.surface（11.23.p.m）添加路径（已提交）<br>    
+4.surface（11.23.p.m）添加路径（已提交)    
     path('user_center/del_good/', views.del_goods),<br>
     path('user_center/del_cart/', views.del_carts),<br>
     path('user_center/buy_allgood/', views.buy_goods),<br>
