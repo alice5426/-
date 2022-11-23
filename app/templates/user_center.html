@@ -65,6 +65,7 @@
 </div>
 {# 用户中心分类 #}
 <div class="user_center clearfix">
+    {# 用户中心左边界面 #}
     <div class="user_center_middle">
         <div>
             <img class="img-circle img_show" src="{% static 'img/login_background.png' %}" alt="130*130">
@@ -95,34 +96,37 @@
         </div>
     </div>
 
-    <div class="user_center_right">
+    {# 用户中心右边界面 #}
+    <div class="user_center_right clearfix">
         <div id="show_1">
             {#  我的发布 #}
             {% for foo in issue_list %}
-                <div>
-                    <div>
-                        <a>{{ foo.create_time }}</a>
+                <div class="show_1_1">
+                    <div class="tou_20">
+                        <a style="color: gray">{{ foo.create_time|date:"Y-m-d H:i:s" }}</a>
                     </div>
 
-                    <div>
-                        <div>
+                    <div class="last_left">
+                        <div class="left_bg">
                             <img src="{{ MEDIA_URL }}{{ foo.img }}"/>
                         </div>
                     </div>
 
-                    <div>
-                        <div>
-                            <h2>{{ foo.name }}</h2>
+                    <div class="last_middle">
+                        <div class="last_middle_1">
+                            <p>{{ foo.name }}</p>
                         </div>
-
-                        <div>
-                            <h2 style="float:left;">￥</h2>
-                            <div>{{ foo.price }}</div>
+                        {#                        <hr style="color:#eee; width: 643px"/>#}
+                        <div class="last_middle_2">
+                            <p style="float:left;font-weight: bolder">￥</p>
+                            <div style="color: red">{{ foo.price }}</div>
                         </div>
                     </div>
 
-                    <div>
-                        <button class="btn btn-default" onclick="del_goods({{ foo.id }})" style="cursor:pointer;">删除</button>
+                    <div class="last_right">
+                        <button class="btn btn-default " onclick="del_goods({{ foo.id }})"
+                                style="cursor:pointer;margin: auto;">删除
+                        </button>
                     </div>
                 </div>
             {% endfor %}
@@ -131,62 +135,120 @@
         <div id="show_2">
             {#  商品 #}
             {% for foo in cart_list %}
-                <div>
-                    <div>
-                        <a>{{ foo.goods.create_time | date:"Y-m-d H:i:s" }}</a>
+                <div class="show_1_1">
+                    <div class="tou_20">
+                        <a style="color: gray">{{ foo.create_time | date:"Y-m-d H:i:s" }}</a>
                     </div>
 
-                    <div>
-                        <div>
-                            <img src="{{ MEDIA_URL }}{{ foo.goods.img }}"/>
+                    <div class="last_left">
+                        <div class="left_bg">
+                            <img src="{{ MEDIA_URL }}{{ foo.img }}"/>
                         </div>
                     </div>
 
-                    <div>
-                        <div>
-                            <h2>{{ foo.goods.name }}</h2>
+                    <div class="last_middle">
+                        <div class="last_middle_1">
+                            <p>{{ foo.name }}</p>
                         </div>
-                        <div>
-                            <h2>￥</h2>
-                            <div>{{ foo.goods.price }}</div>
+                        <div class="last_middle_2">
+                            <p style="float:left;font-weight: bolder">￥</p>
+                            <div style="color: red">{{ foo.price }}</div>
                         </div>
                     </div>
-                    <div>
-                        <button class="del_button1" onclick="buy_good({{ foo.goods.id }})" style="cursor: pointer">立即购买</button>
-                        <button class="del_button2" onclick="del_cart({{ foo.goods.id }})" style="cursor:pointer">删除</button>
+                    <div class="last_right">
+                        <button class="btn btn-default" onclick="buy_good({{ foo.id }})" style="cursor: pointer">
+                            立即购买
+                        </button>
+                        <button class="btn btn-default" onclick="del_cart({{ foo.id }})" style="cursor:pointer">删除
+                        </button>
                     </div>
                 </div>
             {% endfor %}
-            <button class="del_button3" onclick="buy_allgood({{ foo.goods.id }})" style="cursor: pointer">全部购买</button>
+            <div style="float: right;margin-right: 75px;">
+                <button class="btn btn-success" onclick="buy_allgood({{ foo.id }})"
+                        style="cursor: pointer;">全部购买
+                </button>
+            </div>
         </div>
 
         <div id="show_3">
-            <div>
-                <div>
-                    <div>
-                        <a>头像</a>
+            <div class="show_3_bg clearfix">
+                <div class="fir_flo">
+                    <div class="touxiang_28">
+                        <a style="color: black">头像</a>
                     </div>
 
-                    <div>
+                    <div class="touxiang_img">
                         <img id="show_img_2" src="{% static 'img/login_background.png' %}"/>
                     </div>
 
-                    <div>
+                    <div class="chose_file">
                         <input id="head_pic" type="file">
                     </div>
                 </div>
 
-                <div>
-                    <div>
-                        <a>*昵称</a>
+                <div class="sec_flo">
+                    <div class="left-size">
+                        <a style="color: black">*昵称</a>
+                    </div>
+                    <div class="user_nicheng">
+                        <input class="layui-input " type="text" name="user-nicheng" autocomplete="off"
+                               placeholder="用户昵称">
+                    </div>
+                    <div class="user-right">
+                        <div class="layui-form-mid layui-word-aux" style="float: left;margin-left: 5px;">3-16位
+                            汉字、数字、字母（大小写）、下划线组成
+                        </div>
+                    </div>
+                </div>
+
+                <div class="thi_flo">
+                    <div class="left-size">
+                        <a style="color: black">个性签名</a>
                     </div>
                     <div>
-                        <input type="text" name="goods_name" autocomplete="off" placeholder="用户信息">
+                        <div class="last_90">
+                            <input type="text" name="user-information" autocomplete="off" class="layui-input"
+                                   style="width: 100%;"/>
+                        </div>
                     </div>
+                </div>
+
+                <div class="fou_flo">
+                    <div class="left-size">
+                        <a style="color: black">*性别</a>
+                    </div>
+                    <div style="float: left;">
+                        <input class="layui-input " type="text" name="user-sex" placeholder="男/女">
+                    </div>
+                </div>
+
+                <div class="wu_flo">
+                    <div class="left-size">
+                        <a style="color: black">生日</a>
+                    </div>
+                    <div class="last_90">
+                        <div class="layui-form-item">
+                            <div class="layui-input-inline">
+                                <input class="layui-input birthday" type="date" name="user_birthday">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="six_flo">
+                    <div class="left-size">
+                        <a style="color: black">所在地区</a>
+                    </div>
+                    <div class="last_90">
+                        <input type="text" name="user_address" autocomplete="off"
+                               class="layui-input goods-title" style="width: 300px">
+                    </div>
+                </div>
+                <div style="width: 930px">
+                    <button class="btn btn-success" style="margin-left: 430px;">保存修改</button>
                 </div>
             </div>
         </div>
-
         <div id="show_4">
             <div>用任何问题请联系开发人员：15896586579</div>
         </div>
@@ -208,26 +270,41 @@
             $('#show_3').hide();
             $('#show_4').hide();
             $('#show_1').show();
-        });
+        })
+        ;
         $('#fun_2').click(function () {
             $('#show_1').hide();
             $('#show_3').hide();
             $('#show_4').hide();
             $('#show_2').show();
-        });
+        })
+        ;
         $('#fun_3').click(function () {
             $('#show_1').hide();
             $('#show_2').hide();
             $('#show_4').hide();
             $('#show_3').show();
-        });
+        })
+        ;
         $('#fun_4').click(function () {
             $('#show_1').hide();
             $('#show_2').hide();
             $('#show_3').hide();
             $('#show_4').show();
-        });
-    });
+        })
+        ;
+    })
+    ;
+</script>
+<script type="text/javascript">
+    /*
+    $('#fun_1').click(function () {
+        if (confirm('还未发布商品，是否前往发布')) {
+            window.location.href = '/index/issue_page';
+        } else {
+            window.location.href = '/user_center';
+        }
+    })*/
 </script>
 </body>
 </html>
