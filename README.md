@@ -8,6 +8,8 @@
     path('user_center/del_cart/', views.del_carts),<br>
     path('user_center/buy_allgood/', views.buy_goods),<br>
 5.surface提交user_center.html和css <br>
+### surface任务
+11.24 p.m 对用户中心的个人信息进行修改，达到对用户的头像等信息进行存在判断，并显示在个人信息栏当中。用户也可以对信息进行修改，保存后存储到用户数据表当中。
 
 # 待解决的问题
 
