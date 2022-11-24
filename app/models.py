@@ -7,8 +7,12 @@ class User(models.Model):
     email = models.CharField(max_length=255, null=True)
     sex = models.CharField(max_length=4, null=True)
     phone_number = models.CharField(max_length=11, null=True)
-    create_time = models.DateTimeField(null=True)
-    modifytime = models.DateTimeField(null=True)
+    img = models.CharField(max_length=255, null=True)
+    birthday = models.DateField(null=True)
+    address = models.CharField(max_length=255, null=True)
+    information = models.CharField(max_length=255, null=True)
+    create_time = models.DateTimeField(null=True, auto_now_add=True)
+    modifytime = models.DateTimeField(null=True, auto_now_add=True)
 
 
 class Goods(models.Model):
