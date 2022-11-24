@@ -1,6 +1,7 @@
 from django.db import models
 
 
+# 用户表
 class User(models.Model):
     username = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
@@ -15,6 +16,7 @@ class User(models.Model):
     modifytime = models.DateTimeField(null=True, auto_now_add=True)
 
 
+# 发布商品表
 class Goods(models.Model):
     img = models.CharField(max_length=255, null=True)
     sort_id = models.IntegerField(null=True)
@@ -27,6 +29,7 @@ class Goods(models.Model):
     master_pho = models.CharField(max_length=255, null=True)
 
 
+# 存放购买的商品（购物车）
 class Cart(models.Model):
     user_id = models.BigIntegerField(null=False, default=1)
     goods_id = models.BigIntegerField(null=False, default=1)
@@ -34,8 +37,15 @@ class Cart(models.Model):
     modify_time = models.DateTimeField(null=True, auto_now_add=True)
 
 
+# 商品分类名称的表
 class Sort(models.Model):
     sort_name = models.CharField(max_length=255, null=False)
     create_time = models.DateTimeField(null=True, auto_now_add=True)
     modify_time = models.DateTimeField(null=True, auto_now_add=True)
 
+
+# 购买商品表
+class Buy(models.Model):
+    user_id = models.BigIntegerField(null=False, default=1)
+    good_id = models.BigIntegerField(null=False, default=1)
+    create_time = models.DateTimeField(null=True, auto_now_add=True)
