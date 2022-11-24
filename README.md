@@ -15,7 +15,7 @@
 
 1.添加"user_center/user_information/"，路径以及users_information()函数，进行用户信息的传输.  
 2.user表中添加字段（img（varchar）、birthday（date）、address（varchar））
-3.user_center()函数中添加变量user，获取当前用户的相关信息。  
+3.user_center()函数中添加变量user，获取当前用户的相关信息。(已提交）  
 
 # 待解决的问题
 
