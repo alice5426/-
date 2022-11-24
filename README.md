@@ -11,6 +11,12 @@
 ### surface任务
 11.24 p.m 对用户中心的个人信息进行修改，达到对用户的头像等信息进行存在判断，并显示在个人信息栏当中。用户也可以对信息进行修改，保存后存储到用户数据表当中。
 
+记录：
+
+1.添加"user_center/user_information/"，路径以及users_information()函数，进行用户信息的传输.  
+2.user表中添加字段（img（varchar）、birthday（date）、address（varchar））
+3.user_center()函数中添加变量user，获取当前用户的相关信息。  
+
 # 待解决的问题
 
 ### 一、主界面
