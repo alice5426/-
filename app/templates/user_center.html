@@ -67,10 +67,15 @@
 <div class="user_center clearfix">
     {# 用户中心左边界面 #}
     <div class="user_center_middle">
-        <div>
-            <img class="img-circle img_show" src="{% static 'img/login_background.png' %}" alt="130*130">
-        </div>
-
+        {% if user.img == None %}
+            <div>
+                <img id="img_show_1" class="img-circle img_show" src="{% static 'img/touxiang.png' %}" alt="130*130">
+            </div>
+        {% else %}
+            <div>
+                <img id="img_show_1" class="img-circle img_show" src="{{ MEDIA_URL }}{{ user.img }}" alt="130*130">
+            </div>
+        {% endif %}
         <div class="user_lift">
             <p style="color: black">{{ user_name }}</p>
         </div>
@@ -164,91 +169,98 @@
                     </div>
                 </div>
             {% endfor %}
-            <div style="float: right;margin-right: 75px;">
-                <button class="btn btn-success" onclick="buy_allgood({{ foo.id }})"
-                        style="cursor: pointer;">全部购买
-                </button>
-            </div>
         </div>
 
         <div id="show_3">
-            <div class="show_3_bg clearfix">
-                <div class="fir_flo">
-                    <div class="touxiang_28">
-                        <a style="color: black">头像</a>
-                    </div>
-
-                    <div class="touxiang_img">
-                        <img id="show_img_2" src="{% static 'img/login_background.png' %}"/>
-                    </div>
-
-                    <div class="chose_file">
-                        <input id="head_pic" type="file">
-                    </div>
-                </div>
-
-                <div class="sec_flo">
-                    <div class="left-size">
-                        <a style="color: black">*昵称</a>
-                    </div>
-                    <div class="user_nicheng">
-                        <input class="layui-input " type="text" name="user-nicheng" autocomplete="off"
-                               placeholder="用户昵称">
-                    </div>
-                    <div class="user-right">
-                        <div class="layui-form-mid layui-word-aux" style="float: left;margin-left: 5px;">3-16位
-                            汉字、数字、字母（大小写）、下划线组成
+            <form id="information_form">
+                <div class="show_3_bg clearfix">
+                    <div class="fir_flo">
+                        <div class="touxiang_28">
+                            <a style="color: black">头像</a>
+                        </div>
+                        {% if user.img == None %}
+                            <div class="touxiang_img">
+                                <img id="img_show_2" class="img-circle" src="{% static 'img/touxiang.png' %}"/>
+                            </div>
+                        {% else %}
+                            <div class="touxiang_img">
+                                <img id="img_show_2" class="img-circle" src="{{ MEDIA_URL }}{{ user.img }}"/>
+                            </div>
+                        {% endif %}
+                        <div class="chose_file">
+                            <input id="head_pic" type="file" name="head_img">
                         </div>
                     </div>
-                </div>
 
-                <div class="thi_flo">
-                    <div class="left-size">
-                        <a style="color: black">个性签名</a>
-                    </div>
-                    <div>
-                        <div class="last_90">
-                            <input type="text" name="user-information" autocomplete="off" class="layui-input"
-                                   style="width: 100%;"/>
+                    <div class="sec_flo">
+                        <div class="left-size">
+                            <a style="color: black">*昵称</a>
                         </div>
-                    </div>
-                </div>
-
-                <div class="fou_flo">
-                    <div class="left-size">
-                        <a style="color: black">*性别</a>
-                    </div>
-                    <div style="float: left;">
-                        <input class="layui-input " type="text" name="user-sex" placeholder="男/女">
-                    </div>
-                </div>
-
-                <div class="wu_flo">
-                    <div class="left-size">
-                        <a style="color: black">生日</a>
-                    </div>
-                    <div class="last_90">
-                        <div class="layui-form-item">
-                            <div class="layui-input-inline">
-                                <input class="layui-input birthday" type="date" name="user_birthday">
+                        <div class="user_nicheng">
+                            <input id="user_name" class="layui-input " type="text" name="user-nicheng"
+                                   autocomplete="off"
+                                   placeholder="用户昵称">
+                        </div>
+                        <div class="user-right">
+                            <div class="layui-form-mid layui-word-aux" style="float: left;margin-left: 5px;">3-16位
+                                汉字、数字、字母（大小写）、下划线组成
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="six_flo">
-                    <div class="left-size">
-                        <a style="color: black">所在地区</a>
+
+                    <div class="thi_flo">
+                        <div class="left-size">
+                            <a style="color: black">个性签名</a>
+                        </div>
+                        <div>
+                            <div class="last_90">
+                                <input id="user_information" type="text" name="user-information" autocomplete="off"
+                                       class="layui-input"
+                                       style="width: 100%;"/>
+                            </div>
+                        </div>
                     </div>
-                    <div class="last_90">
-                        <input type="text" name="user_address" autocomplete="off"
-                               class="layui-input goods-title" style="width: 300px">
+
+                    <div class="fou_flo">
+                        <div class="left-size">
+                            <a style="color: black">*性别</a>
+                        </div>
+                        <div style="float: left;">
+                            <input id="user_sex" class="layui-input " type="text" name="user-sex" placeholder="男/女">
+                        </div>
+                    </div>
+
+                    <div class="wu_flo">
+                        <div class="left-size">
+                            <a style="color: black">生日</a>
+                        </div>
+                        <div class="last_90">
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline">
+                                    <input id="user_birthday" class="layui-input birthday" type="date"
+                                           name="user-birthday">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="six_flo">
+                        <div class="left-size">
+                            <a style="color: black">所在地区</a>
+                        </div>
+                        <div class="last_90">
+                            <input id="user_address" type="text" name="user-address" autocomplete="off"
+                                   class="layui-input goods-title" style="width: 300px">
+                        </div>
+                    </div>
+                    <div style="width: 930px">
+                        <button class="btn btn-success" style="margin-left: 430px;" onclick="information_save()">
+                            保存修改
+                        </button>
                     </div>
                 </div>
-                <div style="width: 930px">
-                    <button class="btn btn-success" style="margin-left: 430px;">保存修改</button>
-                </div>
-            </div>
+            </form>
         </div>
+
         <div id="show_4">
             <div>用任何问题请联系开发人员：15896586579</div>
         </div>
@@ -296,15 +308,109 @@
     })
     ;
 </script>
+{# 删除，购买按钮的操作 #}
+<script type="text/javascript">
+    {# 发布商品的删除 #}
+
+    function del_goods(id) {
+        layer.confirm('是否要删除', {
+            btn: ['是', '否']
+        }, function () {
+            $.ajax({
+                url: "del_good",
+                type: "GET",
+                data: {"id": id},
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data === 1) {
+                        window.location.reload();
+                    }
+                    if (data === 0) {
+                        layer.msg("删除失败");
+                    }
+                },
+                error: function () {
+                    layer.msg("发送失败");
+                }
+            })
+        }, function () {
+        });
+    }
+</script>
+{# 头像上传的操作 #}
+<script type="text/javascript">
+    $(function () {
+        layui.use(['layer', 'form'], function () {
+            let layer = layui.layer, form = layui.form;
+            form.render();
+        });
+        $("#head_pic").change(function () {
+            let $file = $(this);
+            let fileObj = $file[0];
+            let windowURL = window.URL || window.webkitURL;
+            let dataURL;
+            //let $img_1 = $("#img_show_1");
+            let $img_2 = $("#img_show_2");
+            if (fileObj && fileObj.files && fileObj.files[0]) {
+                dataURL = windowURL.createObjectURL(fileObj.files[0]);
+                //$img_1.attr('src', dataURL);
+                $img_2.attr('src', dataURL);
+            } else {
+                dataURL = $file.val();
+                let imgObj = document.getElementById("preview");
+                imgObj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = dataURL;
+            }
+        })
+    })
+</script>
+
+{# 信息填充与发送 #}
 <script type="text/javascript">
     /*
-    $('#fun_1').click(function () {
-        if (confirm('还未发布商品，是否前往发布')) {
-            window.location.href = '/index/issue_page';
-        } else {
-            window.location.href = '/user_center';
-        }
-    })*/
+    let username = "{{ user.username }}";
+    let user_information = "{{ user.information }}";
+    let user_sex = "{{ user.sex }}";
+    let user_birthday = "{{ user.birthday }}";
+    let user_address = "{{ user.address }}";
+    if (username) {
+        $("#user_name").val(username);
+    }
+    if (user_information !== "None") {
+        $("#suer_information").val(user_information);
+    }
+    if (user_sex) {
+        $("#user_sex").val(user_sex);
+    }
+    if (user_birthday !== "None") {
+        $("#user_birthday").val(user_birthday);
+    }
+    if (user_address !== "None") {
+        $("#user_address").val(user_address);
+    }*/
+
+    function information_save() {
+        let formData = new FormData($("#information_form", 0, 0)[0]);
+        $.ajax({
+            type: "POST",
+            url: "user_information/",
+            data: formData,
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (data === 1) {
+                    layer.msg("保存成功");
+                } else if (data === 0) {
+                    layer.msg("保存失败");
+                }
+            },
+            error: function () {
+                layer.msg("未知错误");
+            }
+        });
+    }
 </script>
 </body>
 </html>
