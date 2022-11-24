@@ -155,23 +155,55 @@ def login_out(request):
     del request.session['pubkey']
     return HttpResponseRedirect("/index/")
 
-
 # 用户中心
 def user_center(request):
     user_name = request.session.get('user_name')
     user_id = request.session.get('user_id')
-    # 该用户发布的商品
-    issue_list = Goods.objects.filter(user_id=user_id)
-    print(issue_list.count())
-    # 该用户购物车中商品
-    goods_list = Cart.objects.filter(user_id=user_id)
-    cart_list = []
-    for goods_id in goods_list.values('goods_id'):
-        good_id = goods_id['goods_id']
-        good = Goods.objects.get(id=good_id)
-        cart_list.append(good)
-    print(cart_list)
-    return render(request, 'user_center.html', locals())
+    if request.method == "GET":
+        # 该用户发布的商品
+        issue_list = Goods.objects.filter(user_id=user_id)
+        # 该用户购物车中商品
+        goods_list = Cart.objects.filter(user_id=user_id)
+        cart_list = []
+        for goods_id in goods_list.values('goods_id'):
+            good_id = goods_id['goods_id']
+            good = Goods.objects.get(id=good_id)
+            cart_list.append(good)
+        user = User.objects.get(id=user_id)
+        return render(request, 'user_center.html', locals())
+
+
+# 接受用户数据的修改
+@csrf_exempt
+def users_information(request):
+    result = 0
+    print("1")
+    user_id = request.session.get('user_id')
+    if request.method == "POST":
+        username = request.POST.get("user-nicheng")
+        print(username)
+        user_information = request.POST.get("user-information")
+        user_sex = request.POST.get("user-sex")
+        user_birthday = request.POST.get("user-birthday")
+        print(user_birthday)
+        user_address = request.POST.get("user-address")
+        user_img = request.FILES.get("head_img")
+        print(user_img.name)
+        user_img_chunks = user_img.chunks()
+        # 文件保存路径
+        user_img_name = os.path.join("image", do_file_name(user_img.name)).replace('\\', '/')
+        # 文件完整的保存路径
+        user_img_path = os.path.join(settings.MEDIA_ROOT, user_img_name).replace('\\', '/')
+        with open(user_img_path, "wb") as file:
+            for chunk in user_img_chunks:
+                file.write(chunk)
+        try:
+            User.objects.filter(id=user_id).update(username=username, information=user_information, sex=user_sex,
+                                                   img=user_img_name, birthday=user_birthday, address=user_address)
+            result = 1
+        except Exception as e:
+            print(e)
+    return HttpResponse(result)
 
 
 # 商品发布页面
