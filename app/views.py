@@ -177,33 +177,41 @@ def user_center(request):
 @csrf_exempt
 def users_information(request):
     result = 0
-    print("1")
     user_id = request.session.get('user_id')
     if request.method == "POST":
-        username = request.POST.get("user-nicheng")
+        username = request.POST.get("username")
         print(username)
-        user_information = request.POST.get("user-information")
-        user_sex = request.POST.get("user-sex")
-        user_birthday = request.POST.get("user-birthday")
+        user_information = request.POST.get("user_information")
+        print(user_information )
+        user_sex = request.POST.get("user_sex")
+        user_birthday = request.POST.get("user_birthday")
         print(user_birthday)
-        user_address = request.POST.get("user-address")
+        user_address = request.POST.get("user_address")
         user_img = request.FILES.get("head_img")
-        print(user_img.name)
-        user_img_chunks = user_img.chunks()
-        # 文件保存路径
-        user_img_name = os.path.join("image", do_file_name(user_img.name)).replace('\\', '/')
-        # 文件完整的保存路径
-        user_img_path = os.path.join(settings.MEDIA_ROOT, user_img_name).replace('\\', '/')
-        with open(user_img_path, "wb") as file:
-            for chunk in user_img_chunks:
-                file.write(chunk)
-        try:
-            User.objects.filter(id=user_id).update(username=username, information=user_information, sex=user_sex,
-                                                   img=user_img_name, birthday=user_birthday, address=user_address)
-            result = 1
-        except Exception as e:
-            print(e)
+        if user_img == None:
+            try:
+                User.objects.filter(id=user_id).update(username=username, information=user_information, sex=user_sex,
+                                                    birthday=user_birthday, address=user_address)
+                result = 1
+            except Exception as e:
+                print(e)
+        else:
+            user_img_chunks = user_img.chunks()
+            # 文件保存路径
+            user_img_name = os.path.join("image", do_file_name(user_img.name)).replace('\\', '/')
+            # 文件完整的保存路径
+            user_img_path = os.path.join(settings.MEDIA_ROOT, user_img_name).replace('\\', '/')
+            with open(user_img_path, "wb") as file:
+                for chunk in user_img_chunks:
+                    file.write(chunk)
+            try:
+                User.objects.filter(id=user_id).update(username=username, information=user_information, sex=user_sex,
+                                                       img=user_img_name, birthday=user_birthday, address=user_address)
+                result = 1
+            except Exception as e:
+                print(e)
     return HttpResponse(result)
+
 
 
 # 商品发布页面
@@ -290,5 +298,44 @@ def join_cart(request):
         cart.save()
     except Exception:
         print(Exception)
+        result = 0
+    return HttpResponse(json.dumps(result))
+
+
+# 发布商品的删除
+def  del_goods(request):
+    result = 1
+    good_id = request.GET.get("id")
+    print("id"+good_id)
+    try:
+        Goods.objects.filter(id=good_id).delete()
+    except Exception:
+        result = 0
+    return HttpResponse(json.dumps(result))
+
+
+# 购物车商品删除
+def del_carts(request):
+    result = 1
+    user_id = request.session.get("user_id")
+    good_id = request.GET.get("id")
+    try:
+        Cart.objects.filter(user_id=user_id, goods_id= good_id).delete()
+    except Exception:
+        result = 0
+    return HttpResponse(json.dumps(result))
+
+
+# 购买商品
+def buy_goods(request):
+    result = 1
+    user_id = request.session.get("user_id")
+    good_id = request.GET.get("id")
+    buy = Buy()
+    buy.user_id = user_id
+    buy.good_id = good_id
+    try:
+        buy.save()
+    except Exception:
         result = 0
     return HttpResponse(json.dumps(result))
