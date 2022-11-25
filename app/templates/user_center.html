@@ -172,7 +172,6 @@
         </div>
 
         <div id="show_3">
-            <form id="information_form">
                 <div class="show_3_bg clearfix">
                     <div class="fir_flo">
                         <div class="touxiang_28">
@@ -258,7 +257,6 @@
                         </button>
                     </div>
                 </div>
-            </form>
         </div>
 
         <div id="show_4">
@@ -369,11 +367,11 @@
 {# 信息填充与发送 #}
 <script type="text/javascript">
     /*
-    let username = "{{ user.username }}";
-    let user_information = "{{ user.information }}";
-    let user_sex = "{{ user.sex }}";
-    let user_birthday = "{{ user.birthday }}";
-    let user_address = "{{ user.address }}";
+    {#let username = "{{ user.username }}";#}
+    {#let user_information = "{{ user.information }}";#}
+    {#let user_sex = "{{ user.sex }}";#}
+    {#let user_birthday = "{{ user.birthday }}";#}
+    {#let user_address = "{{ user.address }}";#}
     if (username) {
         $("#user_name").val(username);
     }
@@ -391,11 +389,26 @@
     }*/
 
     function information_save() {
-        let formData = new FormData($("#information_form", 0, 0)[0]);
+        {#let formData = new FormData($("#information_form", 0, 0)[0]);#}
+        if ($("#user_name").val() === ""){
+            layer.msg("昵称不能为空");
+            return ;
+        }
+        if ($("#user_sex").val() === ""){
+            layer.msg("性别不能为空");
+            return ;
+        }
         $.ajax({
             type: "POST",
             url: "user_information/",
-            data: formData,
+            data: {
+                "head_img":  $("#head_pic").val();
+                "user_nicheng": $("#user_name").val();
+                "user_information": $("#user_information").val(),
+                "user_sex": $("#user_sex").val(),
+                "user_birthday": $("#user_birthday").val(),
+                "user_address": $("#user_address").val()
+            },
             dataType: "json",
             processData: false,
             contentType: false,
