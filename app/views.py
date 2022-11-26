@@ -1,4 +1,3 @@
-import json
 import os.path
 import uuid
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
@@ -7,10 +6,10 @@ from Crypto import Random
 from Crypto.Cipher import PKCS1_v1_5
 import base64
 from django.views.decorators.csrf import csrf_exempt
-from app.models import Goods, User, Cart, Sort
+from app.models import Goods, User, Cart, Sort, Buy
 import hashlib
 from django.conf import settings
-
+import json
 
 # hash加密存储与验证
 def hash_md5(ciphertext):
@@ -26,6 +25,7 @@ def do_file_name(file_name):
     return str(uuid.uuid1()) + os.path.splitext(file_name)[1]
 
 
+# 主界面
 def index(request):
     user_name = request.session.get('user_name')
     user_id = request.session.get('user_id')
@@ -34,10 +34,10 @@ def index(request):
         goods_list = Goods.objects.filter().exclude(user_id=user_id).order_by('create_time')
     else:
         goods_list = Goods.objects.filter().order_by('create_time')
-    print(goods_list)
     return render(request, 'index.html', locals())
 
 
+# 登录
 def login(request):
     if request.method == "GET":
         # username = request.session.get('username', None)
@@ -79,12 +79,15 @@ def login(request):
                         error = "用户名或密码错误"
                 else:
                     error = "用户名或密码错误"
+            else:
+                error = "用户名或密码错误"
             return render(request, 'login.html', locals())
     else:
         error = "用户名或密码不能为空"
         return render(request, 'login.html', locals())
 
 
+# 注册
 def register(request):
     if request.method == "GET":
         random_generator = Random.new().read
@@ -148,12 +151,14 @@ def register(request):
                 return render(request, 'register.html', locals())
 
 
+# 退出
 def login_out(request):
     del request.session['user_name']
     del request.session['user_id']
     del request.session['privkey']
     del request.session['pubkey']
     return HttpResponseRedirect("/index/")
+
 
 # 用户中心
 def user_center(request):
@@ -163,13 +168,31 @@ def user_center(request):
         # 该用户发布的商品
         issue_list = Goods.objects.filter(user_id=user_id)
         # 该用户购物车中商品
-        goods_list = Cart.objects.filter(user_id=user_id)
-        cart_list = []
-        for goods_id in goods_list.values('goods_id'):
-            good_id = goods_id['goods_id']
-            good = Goods.objects.get(id=good_id)
-            cart_list.append(good)
+        goods_list = Cart.objects.filter(cart_user_id=user_id)
+        # 用户购物记录
+        user_buy = Buy.objects.filter(user_id= user_id)
+
+        cart_list = [] #存储用户购物车的商品
+        for goods in goods_list:
+            cart_id_dict = {}
+            cart_id_dict['cart_id'] = goods.id
+            cart_id_dict['cart_create'] = goods.cart_create_time
+            cart_id_dict['good'] = Goods.objects.get(id=goods.goods_id)
+            cart_list.append(cart_id_dict)
+
+        buy_list = []  # 存储用户购物记录
+        for buy in user_buy:
+            user_buy_dict = {}
+            user_buy_dict['buy_id'] = buy.id
+            user_buy_dict['buy_create'] = buy.create_time
+            user_buy_dict['good'] = Goods.objects.get(id = buy.good_id )
+            buy_list.append(user_buy_dict )
+
         user = User.objects.get(id=user_id)
+        if user.birthday != None:
+            user_birthday = user.birthday.strftime('%Y-%m-%d')
+        else:
+            user_birthday = user.birthday
         return render(request, 'user_center.html', locals())
 
 
@@ -179,15 +202,17 @@ def users_information(request):
     result = 0
     user_id = request.session.get('user_id')
     if request.method == "POST":
-        username = request.POST.get("username")
+        username = request.POST.get("user_nicheng")
         print(username)
         user_information = request.POST.get("user_information")
         print(user_information )
         user_sex = request.POST.get("user_sex")
+        print(user_sex)
         user_birthday = request.POST.get("user_birthday")
         print(user_birthday)
         user_address = request.POST.get("user_address")
         user_img = request.FILES.get("head_img")
+        print(user_img )
         if user_img == None:
             try:
                 User.objects.filter(id=user_id).update(username=username, information=user_information, sex=user_sex,
@@ -274,7 +299,6 @@ def good_detail_page(request):
     id = request.GET.get('id')
     print("id:" + id)
     goods_detail = Goods.objects.get(id=id)
-    print(goods_detail.create_time)
     return render(request, "good_detail_page.html", {"goods_detail": goods_detail, "user_name": user_name})
 
 
@@ -290,9 +314,10 @@ def test(request):
 def join_cart(request):
     result = 1
     good_id = request.GET.get("id")
+    print(good_id)
     user_id = request.session.get("user_id")
     cart = Cart()
-    cart.user_id = user_id
+    cart.cart_user_id = user_id
     cart.goods_id = good_id
     try:
         cart.save()
@@ -318,11 +343,15 @@ def  del_goods(request):
 def del_carts(request):
     result = 1
     user_id = request.session.get("user_id")
-    good_id = request.GET.get("id")
+    good_cart_id = request.GET.get("id")
+    del_cart_dict = {}
     try:
-        Cart.objects.filter(user_id=user_id, goods_id= good_id).delete()
-    except Exception:
+        del_cart_dict["cart_user_id"] = user_id
+        del_cart_dict ["id"] =good_cart_id
+        Cart.objects.filter(**del_cart_dict).delete()
+    except Exception as e :
         result = 0
+        print(e)
     return HttpResponse(json.dumps(result))
 
 
