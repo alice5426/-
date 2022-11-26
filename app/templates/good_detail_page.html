@@ -126,7 +126,10 @@
                     layer.confirm('加入成功', {
                         btn: ['确定', '取消']
                     }, function () {
-                        window.location.href = "/user_center";
+                        layer.msg('添加成功');
+                        setTimeout(function (){
+                            window.location.href = "/user_center";
+                        }, 800);
                     }, function () {
 
                     });
