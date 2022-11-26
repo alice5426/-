@@ -31,10 +31,10 @@ class Goods(models.Model):
 
 # 存放购买的商品（购物车）
 class Cart(models.Model):
-    user_id = models.BigIntegerField(null=False, default=1)
+    cart_user_id = models.BigIntegerField(null=False, default=1)
     goods_id = models.BigIntegerField(null=False, default=1)
-    create_time = models.DateTimeField(null=True, auto_now_add=True)
-    modify_time = models.DateTimeField(null=True, auto_now_add=True)
+    cart_create_time = models.DateTimeField(null=True, auto_now_add=True)
+    cart_modify_time = models.DateTimeField(null=True, auto_now_add=True)
 
 
 # 商品分类名称的表
