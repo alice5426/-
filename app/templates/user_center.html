@@ -49,7 +49,8 @@
     <div class="container clearfix">
         <div class="menu">
             <a href="/index/">首页</a>
-            <a>商品</a>
+            <a href="https://www.taobao.com">淘宝</a>
+            <a href="https://www.jd.com">京东</a>
         </div>
         <div class="account">
             {% if user_name == None %}
@@ -97,7 +98,7 @@
 
         <div class="user_lift">
             <div class="fa fa-comment-o tag_float"></div>
-            <div id="fun_4" style="font-size: 15px; cursor: pointer;">意见反馈</div>
+            <div id="fun_4" style="font-size: 15px; cursor: pointer;">购物记录</div>
         </div>
     </div>
 
@@ -142,29 +143,29 @@
             {% for foo in cart_list %}
                 <div class="show_1_1">
                     <div class="tou_20">
-                        <a style="color: gray">{{ foo.create_time | date:"Y-m-d H:i:s" }}</a>
+                        <a style="color: gray">{{ foo.cart_create | date:"Y-m-d H:i:s" }}</a>
                     </div>
 
                     <div class="last_left">
                         <div class="left_bg">
-                            <img src="{{ MEDIA_URL }}{{ foo.img }}"/>
+                            <img src="{{ MEDIA_URL }}{{ foo.good.img }}"/>
                         </div>
                     </div>
 
                     <div class="last_middle">
                         <div class="last_middle_1">
-                            <p>{{ foo.name }}</p>
+                            <p>{{ foo.good.name }}</p>
                         </div>
                         <div class="last_middle_2">
                             <p style="float:left;font-weight: bolder">￥</p>
-                            <div style="color: red">{{ foo.price }}</div>
+                            <div style="color: red">{{ foo.good.price }}</div>
                         </div>
                     </div>
                     <div class="last_right">
-                        <button class="btn btn-default" onclick="buy_good({{ foo.id }})" style="cursor: pointer">
+                        <button class="btn btn-default" onclick="buy_good({{ foo.good.id }})" style="cursor: pointer">
                             立即购买
                         </button>
-                        <button class="btn btn-default" onclick="del_cart({{ foo.id }})" style="cursor:pointer">删除
+                        <button class="btn btn-default" onclick="del_cart({{ foo.cart_id }})" style="cursor:pointer">删除
                         </button>
                     </div>
                 </div>
@@ -237,7 +238,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-input-inline">
                                     <input id="user_birthday" class="layui-input birthday" type="date"
-                                           name="user-birthday">
+                                           name="user-birthday" value="2000-10-01">
                                 </div>
                             </div>
                         </div>
@@ -260,6 +261,33 @@
         </div>
 
         <div id="show_4">
+            {% for foo in buy_list %}
+                <div class="show_1_1">
+                    <div class="tou_20">
+                        <a style="color: gray">{{ foo.buy_create | date:"Y-m-d H:i:s" }}</a>
+                    </div>
+
+                    <div class="last_left">
+                        <div class="left_bg">
+                            <img src="{{ MEDIA_URL }}{{ foo.good.img }}"/>
+                        </div>
+                    </div>
+
+                    <div class="last_middle">
+                        <div class="last_middle_1">
+                            <p>{{ foo.good.name }}</p>
+                        </div>
+                        <div class="last_middle_2">
+                            <p style="float:left;font-weight: bolder">￥</p>
+                            <div style="color: red">{{ foo.good.price }}</div>
+                        </div>
+                    </div>
+                    <div class="last_right">
+                        <button class="btn btn-default" onclick="del_buy({{ foo.cart_id }})" style="cursor:pointer">删除
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
             <div>用任何问题请联系开发人员：15896586579</div>
         </div>
     </div>
@@ -306,10 +334,11 @@
     })
     ;
 </script>
+
 {# 删除，购买按钮的操作 #}
 <script type="text/javascript">
-    {# 发布商品的删除 #}
 
+    {# 发布商品的删除 #}
     function del_goods(id) {
         layer.confirm('是否要删除', {
             btn: ['是', '否']
@@ -322,7 +351,10 @@
                 success: function (data) {
                     console.log(data);
                     if (data === 1) {
-                        window.location.reload();
+                        layer.msg('删除成功');
+                        setTimeout( function (){
+                            window.location.reload();
+                        }, 800);
                     }
                     if (data === 0) {
                         layer.msg("删除失败");
@@ -335,7 +367,68 @@
         }, function () {
         });
     }
+
+    {# 购物车中商品的删除 #}
+    function del_cart(id){
+        layer.confirm('是否删除',{
+            btn: ['是', '否']
+        },function (){
+            $.ajax({
+                url: "del_cart/",
+                type: "GET",
+                data: {"id":id},
+                dataType: "json",
+                success: function (data){
+                    if (data === 1){
+                        layer.msg('删除成功')
+                        setTimeout( function (){
+                            window.location.reload();
+                        }, 800);
+                    }
+                    if (data === 0){
+                        layer.msg('删除失败');
+                    }
+                },
+                error: function (){
+                    layer.msg('发生未知错误');
+                }
+            })
+        },function (){
+
+        });
+    }
+
+    {# 购买商品 #}
+    function buy_good(id){
+        layer.confirm('是否购买',{
+            btn: ['是', '否']
+        },function (){
+            $.ajax({
+                url: "buy_good/",
+                type: "GET",
+                data: {"id": id},
+                dataType: "json",
+                success: function (data){
+                    if (data === 1){
+                        layer.msg('购买成功');
+                        setTimeout( function (){
+                            window.location.href = "/user_center";
+                        }, 800);
+                    }
+                    if (data === 0){
+                        layer.msg('购买失败');
+                    }
+                },
+                error: function (){
+                    layer.msg('未知错误');
+                }
+            });
+        },function (){
+
+        });
+    }
 </script>
+
 {# 头像上传的操作 #}
 <script type="text/javascript">
     $(function () {
@@ -366,17 +459,19 @@
 
 {# 信息填充与发送 #}
 <script type="text/javascript">
-    /*
-    {#let username = "{{ user.username }}";#}
-    {#let user_information = "{{ user.information }}";#}
-    {#let user_sex = "{{ user.sex }}";#}
-    {#let user_birthday = "{{ user.birthday }}";#}
-    {#let user_address = "{{ user.address }}";#}
+
+    let username = "{{ user.username }}";
+    let user_information = "{{ user.information }}";
+    console.log(user_information);
+    let user_sex = "{{ user.sex }}";
+    let user_birthday = "{{ user_birthday}}";
+    console.log(user_birthday)
+    let user_address = "{{ user.address }}";
     if (username) {
         $("#user_name").val(username);
     }
     if (user_information !== "None") {
-        $("#suer_information").val(user_information);
+        $("#user_information").val(user_information);
     }
     if (user_sex) {
         $("#user_sex").val(user_sex);
@@ -386,10 +481,17 @@
     }
     if (user_address !== "None") {
         $("#user_address").val(user_address);
-    }*/
+    }
 
     function information_save() {
-        {#let formData = new FormData($("#information_form", 0, 0)[0]);#}
+        let formdata = new FormData();
+        formdata.append("head_img", $("#head_pic")[0].files[0]);
+        formdata.append("user_nicheng", $("#user_name").val());
+        formdata.append("user_information", $("#user_information").val());
+        formdata.append("user_sex", $("#user_sex").val());
+        formdata.append("user_birthday", $("#user_birthday").val());
+        formdata.append("user_address", $("#user_address").val());
+        console.log(formdata)
         if ($("#user_name").val() === ""){
             layer.msg("昵称不能为空");
             return ;
@@ -401,20 +503,16 @@
         $.ajax({
             type: "POST",
             url: "user_information/",
-            data: {
-                "head_img":  $("#head_pic").val(),
-                "user_nicheng": $("#user_name").val(),
-                "user_information": $("#user_information").val(),
-                "user_sex": $("#user_sex").val(),
-                "user_birthday": $("#user_birthday").val(),
-                "user_address": $("#user_address").val()
-            },
+            data: formdata,
             dataType: "json",
             processData: false,
             contentType: false,
             success: function (data) {
                 if (data === 1) {
                     layer.msg("保存成功");
+                    setTimeout(function (){
+                        window.location.reload();
+                    },800);
                 } else if (data === 0) {
                     layer.msg("保存失败");
                 }
