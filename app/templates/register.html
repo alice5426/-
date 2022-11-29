@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1-dist/css/bootstrap.css ' %}"/>
+    <!--    <link rel="stylesheet" href="static/plugins/bootstrap-3.4.1/css/bootstrap.css"/>-->
+    <!--    <link rel="stylesheet" href="static/plugins/font-awesome-4.7.0/css/font-awesome.css"/>-->
+    <style>
+        .container {
+            width: 450px;
+            height: 520px;
+
+            margin: 150px auto 0;
+
+
+            border: 1px solid #c7ddef;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 style="color: deepskyblue; font-family:新宋体;text-align: center">用户注册</h1>
+    <div style="margin-top: 20px">
+
+        <form id="form" method="post" class="form-horizontal">{% csrf_token %}
+            <div class="form-group">
+                <label for="user-register" class="col-sm-3 control-label">用户名</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="user-register" name="username"
+                           placeholder="请输入用户名"/>
+                    <span>{{ username_error }}</span>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 5px">
+                <label for="sex-register" class="col-sm-3 control-label">性别</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="sex" placeholder="男/女">
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 5px">
+                <label for="passwd1" class="col-sm-3 control-label">密码</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="password1" name="passwd1" placeholder="请输入密码"/>
+                    <input type="hidden" id="pubkey" value="{{ pub_key }}"/>
+                    <span>{{ password_1_error }}</span>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 5px">
+                <label for="passwd2" class="col-sm-3 control-label">确认密码</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="password2" name="passwd2" placeholder="再次输入密码"/>
+                    <span>{{ password_2_error }}</span>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 5px">
+                <label for="email-register" class="col-sm-3 control-label">电子邮箱</label>
+                <div class="col-sm-8">
+                    <input type="email" class="form-control" id="email-register" name="email"
+                           placeholder="请输入电子邮箱"/>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-top: 5px">
+                <label for="phone-register" class="col-sm-3 control-label">电话号码</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="phone-register" name="phone"
+                           placeholder="请输入电话号码"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="注册" class="btn btn-default col-sm-offset-5 col-sm-3"
+                       onclick="en_passwd();return false;"/>
+            </div>
+
+            <div class="form-group">
+
+                <a href="/login/" style="padding-top: 15px" class="col-sm-offset-8">{{ success }}</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/jquery-3.6.1.js' %}"></script>
+<script src="{% static 'js/jsencrypt.min.js' %}"></script>
+<script type="text/javascript">
+    /*
+    function check(){
+        let pwd1 = document.getElementById("password1").value;
+        let pwd2 = document.getElementById("password2").value;
+        if ( pwd1===pwd2){
+            document.getElementById("ti_shi").innerHTML = "<br><p style='color: green'>两次输入密码一致</p>";
+        }else{
+            document.getElementById("ti_shi").innerHTML = "<br><p style='color: red'>两次输入密码不一致</p>";
+        }
+    }*/
+    function en_passwd() {
+        var pubkey = $('#pubkey', 0, 0).val(); //后台发送的公钥
+        var jsencrypt = new JSEncrypt(); //创建加密对象
+        jsencrypt.setPublicKey(pubkey);//设置密钥
+        var pwd1 = $('#password1', 0, 0).val();
+        var pwd2 = $('#password2', 0, 0).val();
+        if (pwd1 && pwd2) {
+            var en_pwd1 = jsencrypt.encrypt(pwd1);
+            var en_pwd2 = jsencrypt.encrypt(pwd2);
+            $('#password1', 0, 0).val(en_pwd1);
+            $('#password2', 0, 0).val(en_pwd2);
+            $('#form', 0, 0).submit();
+        }
+    }
+</script>
+<script type="text/javascript">
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+</body>
+</html>
