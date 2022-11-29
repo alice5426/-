@@ -1,28 +1,3 @@
-# 文件的更替
-
-1.surface 与 笔记本同步(11.21 a.m）。删除css文件中的banner.css <br>
-2.笔记本（11.22 a.m）。修改user_center.html和uer_center.css
-3.surface（11.22 p.m)对views.py进行部分修改，主要对用户界面进行修改（未提交到GitHub）<br>
-4.surface（11.23 p.m）添加路径（已提交)    
-    path('user_center/del_good/', views.del_goods),<br>
-    path('user_center/del_cart/', views.del_carts),<br>
-    path('user_center/buy_allgood/', views.buy_goods),<br>
-5.surface提交user_center.html和css <br>
-### surface任务
-11.24 p.m 对用户中心的个人信息进行修改，达到对用户的头像等信息进行存在判断，并显示在个人信息栏当中。用户也可以对信息进行修改，保存后存储到用户数据表当中。
-
-### 记录：
-
-surface:  
-
-1.添加"user_center/user_information/"，路径以及users_information()函数，进行用户信息的传输.  
-2.user表中添加字段（img（varchar）、birthday（date）、address（varchar））  
-3.user_center()函数中添加变量user，获取当前用户的相关信息。(已提交） 
-
-笔记本：
-
-1.添加购买的物品的表Buy
-
 # 待解决的问题
 
 ### 一、主界面
