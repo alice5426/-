@@ -34,6 +34,7 @@ urlpatterns = [
     path('user_center/del_good/', views.del_goods),
     path('user_center/del_cart/', views.del_carts),
     path('user_center/buy_good/', views.buy_goods),
+    path('user_center/del_buy/', views.del_buys),
     path('user_center/user_information/', views.users_information),
 
     path('index/issue_page/', views.issue_page),
