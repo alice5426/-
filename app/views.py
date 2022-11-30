@@ -397,3 +397,21 @@ def buy_goods(request):
     except Exception:
         result = 0
     return HttpResponse(json.dumps(result))
+
+
+# 删除购物记录
+def del_buys(request):
+    result = 1
+    user_id = request.session.get("user_id")
+    buy_id = request.GET.get("id")
+    buy_dict = {
+        "user_id": user_id,
+        "id": buy_id,
+    }
+    try:
+        Buy.objects.filter(**buy_dict).delete()
+    except Exception as e:
+        print(e)
+        result = 0
+    return HttpResponse(result)
+                        
