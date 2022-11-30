@@ -427,6 +427,35 @@
 
         });
     }
+     
+     {# 删除购物记录 #}
+    function del_buy(id){
+        layer.confirm('是否删除该记录',{
+            btn:['是', '否']
+        },function (){
+            $.ajax({
+                url: "del_buy/",
+                type: "GET",
+                data: {"id":id},
+                dataType: "json",
+                success: function (data){
+                    if (data === 1){
+                        layer.msg("删除成功");
+                        setTimeout(function (){
+                            window.location.href = "/user_center";
+                        },800);
+                    }
+                    if (data === 0){
+                        layer.msg("删除失败");
+                    }
+                },
+                error:function (){
+                    layer.msg("发生位置错误");
+                }
+            });
+        },function (){
+        });
+    }
 </script>
 
 {# 头像上传的操作 #}
