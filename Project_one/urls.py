@@ -23,7 +23,7 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('index/', views.index),
     path('index/classify/', views.classify),
-    path('index/recover/', views.database_backup),
+    path('index/recover/', views.database_recover),
     # 测试
     path('test/', views.test),
     path('login/', views.login),
