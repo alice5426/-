@@ -1,5 +1,10 @@
 import os.path
+import os
+import string
 import uuid
+from datetime import datetime
+from typing import Dict
+from string import *
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from Crypto.PublicKey import RSA
 from Crypto import Random
@@ -26,6 +31,29 @@ def do_file_name(file_name):
     return str(uuid.uuid1()) + os.path.splitext(file_name)[1]
 
 
+# 密码强度的判断
+def check_password(password):
+    d = al = au = pu = 0
+    for ch in password:
+        if ch in string.digits:
+            d = 1
+        elif ch in string.ascii_lowercase:
+            al = 1
+        elif ch in string.ascii_uppercase:
+            au = 1
+        elif ch in string.punctuation:
+            pu = 1
+    if len(password) < 8:
+        strong = 0
+    else:
+        strong = d + al + au + pu
+
+    if strong < 3:
+        return 0
+    elif strong >= 3:
+        return 1
+
+
 # 主界面
 @csrf_exempt
 def index(request):
@@ -47,7 +75,7 @@ def classify(request):
     user_id = request.session.get('user_id')
     try:
         condition = request.GET.get("fen_lei")
-        print(condition)
+        # print(condition)
         sort_id = Sort.objects.get(sort_name=condition)
         goods_list = Goods.objects.filter(sort_id=sort_id.id).exclude(user_id=user_id).order_by('create_time')
         result = 1
@@ -146,6 +174,12 @@ def register(request):
             # 解密
             password_1 = cipher.decrypt(base64.b64decode(password_1.encode()), 'error').decode()
             password_2 = cipher.decrypt(base64.b64decode(password_2.encode()), 'error').decode()
+            # 对密码强度进行判断
+            flag = 1
+            flag = check_password(password_1)
+            if flag == 0:
+                password_1_error = "密码强度不够，请重新设置密码"
+                return render(request, 'register.html', locals())
         else:
             password_1_error = "密码不能为空"
             return render(request, 'register.html', locals())
@@ -199,22 +233,17 @@ def user_center(request):
 
         cart_list = []  # 存储用户购物车的商品
         for goods in goods_list:
-            cart_id_dict = {}
-            cart_id_dict['cart_id'] = goods.id
-            cart_id_dict['cart_create'] = goods.cart_create_time
-            cart_id_dict['good'] = Goods.objects.get(id=goods.goods_id)
+            cart_id_dict = {'cart_id': goods.id, 'cart_create': goods.cart_create_time,
+                            'good': Goods.objects.get(id=goods.goods_id)}
             cart_list.append(cart_id_dict)
 
         buy_list = []  # 存储用户购物记录
         for buy in user_buy:
-            user_buy_dict = {}
-            user_buy_dict['buy_id'] = buy.id
-            user_buy_dict['buy_create'] = buy.create_time
-            user_buy_dict['good'] = Goods.objects.get(id=buy.good_id)
+            user_buy_dict = {'buy_id': buy.id, 'buy_create': buy.create_time, 'good': Goods.objects.get(id=buy.good_id)}
             buy_list.append(user_buy_dict)
 
         user = User.objects.get(id=user_id)
-        if user.birthday != None:
+        if user.birthday is not None:
             user_birthday = user.birthday.strftime('%Y-%m-%d')
         else:
             user_birthday = user.birthday
@@ -228,17 +257,17 @@ def users_information(request):
     user_id = request.session.get('user_id')
     if request.method == "POST":
         username = request.POST.get("user_nicheng")
-        print(username)
+        # print(username)
         user_information = request.POST.get("user_information")
-        print(user_information)
+        # print(user_information)
         user_sex = request.POST.get("user_sex")
-        print(user_sex)
+        # print(user_sex)
         user_birthday = request.POST.get("user_birthday")
-        print(user_birthday)
+        # print(user_birthday)
         user_address = request.POST.get("user_address")
         user_img = request.FILES.get("head_img")
-        print(user_img)
-        if user_img == None:
+        # print(user_img)
+        if user_img is None:
             try:
                 User.objects.filter(id=user_id).update(username=username, information=user_information, sex=user_sex,
                                                        birthday=user_birthday, address=user_address)
@@ -277,20 +306,20 @@ def issue_form(request):
     flag = 0
     if request.method == "POST":
         goods_name = request.POST.get('goods_name')
-        print(goods_name)
+        # print(goods_name)
         goods_detal = request.POST.get('goods_detal')
-        print(goods_detal)
+        # print(goods_detal)
         goods_price = request.POST.get('goods_price')
-        print(goods_price)
+        # print(goods_price)
         categorys = request.POST.get('categorys')
-        print(categorys)
+        # print(categorys)
         address = request.POST.get('address')
-        print(address)
+        # print(address)
         pho_num = request.POST.get('pho_num')
-        print(pho_num)
+        # print(pho_num)
         file_img = request.FILES.get('file_img')  # 获取文件
-        print(file_img.name)
-        print(file_img.size)
+        # print(file_img.name)
+        # print(file_img.size)
         file_chunks = file_img.chunks()
         # 文件保存路径
         file_name = os.path.join("image", do_file_name(file_img.name)).replace('\\', '/')
@@ -310,6 +339,9 @@ def issue_form(request):
         new_issue.sort_id = sort.id
         new_issue.img = file_name
         try:
+            # 对数据库操作之前的数据库的进行备份
+            os.system(
+                'mysqldump -uroot -proot web1db> database/web1db.sql')
             new_issue.save()
             flag = 1
         except Exception as e:
@@ -322,7 +354,7 @@ def good_detail_page(request):
     user_name = request.session.get('user_name')
     id = request.GET.get('id')
 
-    print("id:" + id)
+    # print("id:" + id)
     try:
         goods_detail = Goods.objects.get(id=id)
         return render(request, "good_detail_page.html", {"goods_detail": goods_detail, "user_name": user_name})
@@ -343,12 +375,14 @@ def test(request):
 def join_cart(request):
     result = 1
     good_id = request.GET.get("id")
-    print(good_id)
+    # print(good_id)
     user_id = request.session.get("user_id")
     cart = Cart()
     cart.cart_user_id = user_id
     cart.goods_id = good_id
     try:
+        os.system(
+            'mysqldump -uroot -proot web1db> database/web1db.sql')
         cart.save()
     except Exception:
         print(Exception)
@@ -360,8 +394,10 @@ def join_cart(request):
 def del_goods(request):
     result = 1
     good_id = request.GET.get("id")
-    print("id" + good_id)
+    # print("id" + good_id)
     try:
+        os.system(
+            'mysqldump -uroot -proot web1db> database/web1db.sql')
         Goods.objects.filter(id=good_id).delete()
     except Exception:
         result = 0
@@ -375,6 +411,8 @@ def del_carts(request):
     good_cart_id = request.GET.get("id")
     del_cart_dict = {}
     try:
+        os.system(
+            'mysqldump -uroot -proot web1db> database/web1db.sql')
         del_cart_dict["cart_user_id"] = user_id
         del_cart_dict["id"] = good_cart_id
         Cart.objects.filter(**del_cart_dict).delete()
@@ -393,6 +431,8 @@ def buy_goods(request):
     buy.user_id = user_id
     buy.good_id = good_id
     try:
+        os.system(
+            'mysqldump -uroot -proot web1db> database/web1db.sql')
         buy.save()
     except Exception:
         result = 0
@@ -409,9 +449,22 @@ def del_buys(request):
         "id": buy_id,
     }
     try:
+        os.system(
+            'mysqldump -uroot -proot web1db> database/web1db.sql')
         Buy.objects.filter(**buy_dict).delete()
     except Exception as e:
         print(e)
         result = 0
     return HttpResponse(result)
-                        
+
+
+# 进行数据库的恢复操作
+def database_backup(request):
+    result = 1
+    try:
+        os.system(
+            'mysql -uroot -proot web1db< database/web1db.sql')
+    except Exception as e:
+        print(e)
+        result = 0
+    return HttpResponse(result)
