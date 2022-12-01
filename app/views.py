@@ -459,7 +459,7 @@ def del_buys(request):
 
 
 # 进行数据库的恢复操作
-def database_backup(request):
+def database_recover(request):
     result = 1
     try:
         os.system(
