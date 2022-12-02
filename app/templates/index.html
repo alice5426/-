@@ -51,6 +51,7 @@
             <a href="/index/">首页</a>
             <a href="https://www.taobao.com">淘宝</a>
             <a href="https://www.jd.com">京东</a>
+            <a href="#" onclick="recover()">恢复</a>
         </div>
         <div class="account">
             {% if user_name == None %}
@@ -154,6 +155,26 @@
 
     function fen_lei(classify) {
         window.location.href = "/index/classify/?fen_lei=" +classify;
+    }
+
+    function  recover(){
+        $.ajax({
+            url: "/index/recover",
+            type: "GET",
+            data: {"flag":1},
+            dataType: "json",
+            success:function (data){
+                if (data === 1){
+                    layer.msg("恢复成功");
+                }
+                if (data === 0){
+                    layer.msg("恢复失败");
+                }
+            },
+            error:function (){
+                layer.msg("恢复失败");
+            }
+        })
     }
 </script>
 
